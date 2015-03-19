@@ -14,6 +14,7 @@ from modules import mouseevent, piv
 TIME_STEP = 0.1  # time step in second
 TOTAL_FRAMES = 20  # number of frames to track
 D_RANGE = 15  # ???: something parametor for the pattern finding
+TRACK_SIZE =25  # size to track
 
 
 def main(file_path):
@@ -44,7 +45,7 @@ def main(file_path):
         # find similar patterns around points of the present frame from
         #     the next frame
         di, dj, ccmax = piv.find_flow(gray_image, gray_next_image, ii, jj,
-                                      kernel_size=(25, 25),
+                                      kernel_size=(TRACK_SIZE, TRACK_SIZE),
                                       di_range=(-D_RANGE, D_RANGE),
                                       dj_range=(-D_RANGE, D_RANGE))
 
@@ -75,9 +76,13 @@ def _dump_result(time, idx, x, y):
     print("{} {} {} {}".format(time, idx, y, x))
 
 
-def _draw_marker(image, x, y, radius=10, color=(255, 0, 0), stroke=2):
+def _draw_marker(image, x, y, radius=2, color=(255, 0, 0)):
     """ Draw a circle at the desired coordinate on the image."""
-    cv2.cv.Circle(image, (x, y), radius, color, stroke)
+    point1 = (x - TRACK_SIZE / 2, y - TRACK_SIZE / 2)
+    point2 = (x + TRACK_SIZE / 2, y + TRACK_SIZE / 2)
+
+    cv2.cv.Rectangle(image, point1, point2, color, 1)
+    cv2.cv.Circle(image, (x, y), radius, color, 2)
 
 
 def _load_image(capture, time_sec):
