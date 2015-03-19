@@ -1,6 +1,7 @@
 """atamaTrack
 """
 
+import os.path
 import sys
 
 import cv2
@@ -17,10 +18,11 @@ D_RANGE = 15  # ???: something parametor for the pattern finding
 
 def main(file_path):
     # load a movie file
+    file_name = os.path.basename(file_path)
     capture = cv2.cv.CreateFileCapture(file_path)
 
     # open a window
-    cv2.cv.NamedWindow('Head Tracking', cv2.cv.CV_WINDOW_AUTOSIZE)
+    cv2.cv.NamedWindow(file_name, cv2.cv.CV_WINDOW_AUTOSIZE)
 
     # click heads' positions on the first frame
     image = load_image(capture, 0.0)
@@ -56,7 +58,7 @@ def main(file_path):
             draw_marker(image, x, y)
             dump_result(time + TIME_STEP, idx, x, y)
 
-        cv2.cv.ShowImage('Head Tracking', image)
+        cv2.cv.ShowImage(file_name, image)
         cv2.waitKey(0)
 
     cv2.destroyAllWindows()
