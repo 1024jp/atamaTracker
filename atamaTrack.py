@@ -25,22 +25,22 @@ def main(file_path):
     cv2.cv.NamedWindow(file_name, cv2.cv.CV_WINDOW_AUTOSIZE)
 
     # click heads' positions on the first frame
-    image = load_image(capture, 0.0)
+    image = _load_image(capture, 0.0)
     initial_jjii = getXY.getXY(image).astype(numpy.int)
     ii = initial_jjii[:, 1]
     jj = initial_jjii[:, 0]
 
     # output
     for idx, (x, y) in enumerate(zip(jj, ii)):
-        dump_result(0.0, idx, x, y)
+        _dump_result(0.0, idx, x, y)
 
     # process each frame
     for time in numpy.arange(TOTAL_FRAMES) * TIME_STEP:
-        image = load_image(capture, time)
-        gray_image = to_grayscale(image)
+        image = _load_image(capture, time)
+        gray_image = _to_grayscale(image)
         
-        next_image = load_image(capture, time + TIME_STEP)
-        gray_next_image = to_grayscale(next_image)
+        next_image = _load_image(capture, time + TIME_STEP)
+        gray_next_image = _to_grayscale(next_image)
 
         # find similar patterns around points of the present frame from
         #     the next frame
@@ -55,8 +55,8 @@ def main(file_path):
 
         # output
         for idx, (x, y) in enumerate(zip(jj, ii)):
-            draw_marker(image, x, y)
-            dump_result(time + TIME_STEP, idx, x, y)
+            _draw_marker(image, x, y)
+            _dump_result(time + TIME_STEP, idx, x, y)
 
         cv2.cv.ShowImage(file_name, image)
         cv2.waitKey(0)
@@ -64,7 +64,7 @@ def main(file_path):
     cv2.destroyAllWindows()
 
 
-def dump_result(time, idx, x, y):
+def _dump_result(time, idx, x, y):
     """Print result to the standard output.
 
     Arguments:
@@ -76,12 +76,12 @@ def dump_result(time, idx, x, y):
     print("{} {} {} {}".format(time, idx, y, x))
 
 
-def draw_marker(image, x, y, radius=10, color=(255, 0, 0), stroke=2):
+def _draw_marker(image, x, y, radius=10, color=(255, 0, 0), stroke=2):
     """ Draw a circle at the desired coordinate on the image."""
     cv2.cv.Circle(image, (x, y), radius, color, stroke)
 
 
-def load_image(capture, time_sec):
+def _load_image(capture, time_sec):
     """Load image at the desired time."""
     cv2.cv.SetCaptureProperty(capture, cv2.cv.CV_CAP_PROP_POS_MSEC,
                               time_sec * 1000)
@@ -89,7 +89,7 @@ def load_image(capture, time_sec):
     return cv2.cv.QueryFrame(capture)
 
 
-def to_grayscale(image):
+def _to_grayscale(image):
     """Convert given image to grayscale."""
     return numpy.asarray(cv2.cv.GetMat(image)).astype(numpy.double)[:, :, 0]
 
