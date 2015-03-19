@@ -6,8 +6,7 @@ import sys
 import cv2
 import numpy
 
-import getXY
-import piv
+from modules import getXY, piv
 
 
 # constants
