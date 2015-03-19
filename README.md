@@ -3,7 +3,7 @@ AtamaTracker
 
 ## ファイル構成
 - atamaTrack.py：メインファイル
-- modules/getXY.py：最初のフレームで頭をクリックする用のプログラム
+- modules/mouseevent.py：最初のフレームで頭をクリックする用のプログラム
 - modules/piv.py：パターンマッチング用のプログラム（流体解析用）
 - short.mov：佐野先生からいただいた動画ファイル（プログラム検証用）
 

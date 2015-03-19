@@ -7,7 +7,7 @@ import sys
 import cv2
 import numpy
 
-from modules import getXY, piv
+from modules import mouseevent, piv
 
 
 # constants
@@ -18,17 +18,16 @@ D_RANGE = 15  # ???: something parametor for the pattern finding
 
 def main(file_path):
     # load a movie file
-    file_name = os.path.basename(file_path)
+    window_name = os.path.basename(file_path)
     capture = cv2.cv.CreateFileCapture(file_path)
 
     # open a window
-    cv2.cv.NamedWindow(file_name, cv2.cv.CV_WINDOW_AUTOSIZE)
+    image = _load_image(capture, 0.0)
+    cv2.cv.NamedWindow(window_name)
+    cv2.cv.ShowImage(window_name, image)
 
     # click heads' positions on the first frame
-    image = _load_image(capture, 0.0)
-    initial_jjii = getXY.getXY(image).astype(numpy.int)
-    ii = initial_jjii[:, 1]
-    jj = initial_jjii[:, 0]
+    jj, ii = mouseevent.get_xy(window_name)
 
     # output
     for idx, (x, y) in enumerate(zip(jj, ii)):
@@ -58,7 +57,7 @@ def main(file_path):
             _draw_marker(image, x, y)
             _dump_result(time + TIME_STEP, idx, x, y)
 
-        cv2.cv.ShowImage(file_name, image)
+        cv2.cv.ShowImage(window_name, image)
         cv2.waitKey(0)
 
     cv2.destroyAllWindows()
