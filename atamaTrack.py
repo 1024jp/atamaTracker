@@ -7,7 +7,7 @@ import sys
 import cv2
 import numpy
 
-from modules import mouseevent, piv
+from modules import gui, piv
 
 
 # constants
@@ -28,7 +28,8 @@ def main(file_path):
     cv2.cv.ShowImage(window_name, image)
 
     # click heads' positions on the first frame
-    jj, ii = mouseevent.get_xy(window_name)
+    eventListener = gui.EventListener()
+    jj, ii = eventListener.get_xy(window_name)
 
     # output
     for idx, (x, y) in enumerate(zip(jj, ii)):
