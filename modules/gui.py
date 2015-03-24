@@ -22,7 +22,6 @@ class EventListener(object):
         """
         cv2.setMouseCallback(window_name, self.__onMouseClick)
         cv2.waitKey(0)
-        cv2.destroyAllWindows()
 
         return self.xx, self.yy
 
