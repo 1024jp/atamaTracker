@@ -14,7 +14,7 @@ from modules import mouseevent, piv
 TIME_STEP = 0.1  # time step in second
 TOTAL_FRAMES = 20  # number of frames to track
 FIND_BUFFER = 15  # buffer length to find the pattern in the next frame
-PATTERN_SIZE =25  # size of tracking pattern
+PATTERN_SIZE = 25  # size of tracking pattern
 
 
 def main(file_path):

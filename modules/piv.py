@@ -14,7 +14,6 @@ warnings.simplefilter('ignore', numpy.ComplexWarning)
 
 def xcorr_norm(img, kernel):
     """normalize kernel"""
-
     kernel = kernel - scipy.mean(kernel)
     kernel = kernel / scipy.sqrt(scipy.sum(kernel ** 2))
     kernel_sum = scipy.sum(kernel)
