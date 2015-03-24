@@ -12,7 +12,6 @@ from modules import gui, piv
 
 # constants
 TIME_STEP = 0.1  # time step in second
-TOTAL_FRAMES = 20  # number of frames to track
 FIND_BUFFER = 15  # buffer length to find the pattern in the next frame
 PATTERN_SIZE = 25  # size of tracking pattern
 
@@ -36,10 +35,13 @@ def main(file_path):
         _dump_result(0.0, idx, x, y)
 
     # process each frame
-    for time in numpy.arange(TOTAL_FRAMES) * TIME_STEP:
+    time = 0.0
+    while True:
         image = _load_image(capture, time)
+        if image is None:
+            break
         gray_image = _to_grayscale(image)
-        
+
         next_image = _load_image(capture, time + TIME_STEP)
         gray_next_image = _to_grayscale(next_image)
 
@@ -61,6 +63,8 @@ def main(file_path):
 
         cv2.cv.ShowImage(window_name, image)
         cv2.waitKey(0)
+
+        time += TIME_STEP
 
     cv2.destroyAllWindows()
 
@@ -87,7 +91,10 @@ def _draw_marker(image, x, y, radius=2, color=(255, 0, 0)):
 
 
 def _load_image(capture, time_sec):
-    """Load image at the desired time."""
+    """Load image at the desired time.
+    
+    Retruns None if no image could load.
+    """
     cv2.cv.SetCaptureProperty(capture, cv2.cv.CV_CAP_PROP_POS_MSEC,
                               time_sec * 1000)
 
