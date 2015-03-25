@@ -1,22 +1,27 @@
 AtamaTracker
 ============
 
-## ファイル構成
-- atamaTrack.py：メインファイル
+## Requirements
+- Python 2.x
+- OpenCV
+- numpy
+
+## Contents
+- track.py：メインファイル
 - modules/mouseevent.py：最初のフレームで頭をクリックする用のプログラム
 - modules/piv.py：パターンマッチング用のプログラム（流体解析用）
-- short.mov：佐野先生からいただいた動画ファイル（プログラム検証用）
+<!-- - short.mov：佐野先生からいただいた動画ファイル（プログラム検証用）-->
 
-## 使い方
+## Usage
 - 全てのプログラムファイルと動画ファイルを同じフォルダに置く
-- `python atamaTrack.py short.mov > result.txt` を実行
+- `python track.py short.mov > result.txt` を実行
 - 0秒目の画像が現れるので，ウィンドウをアクティブにしてから頭を複数個クリック
 - クリックし終わったら任意のキー（スペースキー）を押す
 - 任意のキー（スペースキー）を押すごとにフレームが0.1秒ずつ進み，追跡結果が青丸で表示される
 - 最後まで行ったら終了
 - result.txt には各行（時刻，クリックした順のID，i座標（画像上端からの距離），j座標（画像左端からの距離））が格納される
-- atamaTrack.py 17 行目の `TRACK_SIZE` は捜索対象の縦横ピクセル数（パタンの大きさ）
-- atamaTrack.py 16 行目の `D_RANGE` は捜索範囲の縦横ピクセル数
+- track.py 17 行目の `TRACK_SIZE` は捜索対象の縦横ピクセル数（パタンの大きさ）
+- track.py 16 行目の `D_RANGE` は捜索範囲の縦横ピクセル数
 
 ## プログラムがやっていること
 - マウスがクリックされた場所を ii, jj に格納

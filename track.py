@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""atamaTrack
+"""track.py
 """
 
 import os.path
