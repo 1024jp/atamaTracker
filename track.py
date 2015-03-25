@@ -62,7 +62,7 @@ def main(file_path):
         for idx, (x, y) in enumerate(zip(jj, ii)):
             _draw_marker(image, x, y)
             _dump_result(time + TIME_STEP, idx, x, y)
-   
+
         window.image = image
         cv2.waitKey(0)
 
@@ -94,7 +94,7 @@ def _draw_marker(image, x, y, radius=2, color=MARKER_COLOR):
 
 def _load_image(capture, time_sec):
     """Load image at the desired time.
-    
+
     Retruns None if no image could load.
     """
     cv2.cv.SetCaptureProperty(capture, cv2.cv.CV_CAP_PROP_POS_MSEC,

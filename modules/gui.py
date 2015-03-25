@@ -47,10 +47,10 @@ class EventListener(object):
 class Window(object):
     def __init__(self, name):
         self.name = name
-
         cv2.namedWindow(self.name)
 
     def image():
+        """Accessor for image property."""
         doc = "Current image that shown in the window"
 
         def fget(self):
@@ -65,6 +65,5 @@ class Window(object):
     image = property(**image())
 
     def close(self):
-        """Close window.
-        """
+        """Close window."""
         cv2.destroyWindow(self.name)
