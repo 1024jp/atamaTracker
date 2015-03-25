@@ -1,4 +1,4 @@
-"""piv
+"""piv - Particle Image Velocimetry
 """
 
 import warnings

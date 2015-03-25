@@ -12,15 +12,16 @@ class EventListener(object):
     xx -- numpy array for horizontal positions
     yy -- numpy array for vertical positions
     """
-    
-    def __init__(self):
+
+    def __init__(self, window_name):
         self.xx = numpy.array([], dtype=numpy.int)
         self.yy = numpy.array([], dtype=numpy.int)
+        self.window_name = window_name
 
-    def get_xy(self, window_name):
+    def get_xy(self):
         """Listen mouse event and return clicked coordinates.
         """
-        cv2.setMouseCallback(window_name, self.__onMouseClick)
+        cv2.setMouseCallback(self.window_name, self.__onMouseClick)
         cv2.waitKey(0)
 
         return self.xx, self.yy

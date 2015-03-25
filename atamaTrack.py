@@ -27,8 +27,8 @@ def main(file_path):
     cv2.cv.ShowImage(window_name, image)
 
     # click heads' positions on the first frame
-    eventListener = gui.EventListener()
-    jj, ii = eventListener.get_xy(window_name)
+    eventListener = gui.EventListener(window_name)
+    jj, ii = eventListener.get_xy()
 
     # output
     for idx, (x, y) in enumerate(zip(jj, ii)):
@@ -82,7 +82,7 @@ def _dump_result(time, idx, x, y):
 
 
 def _draw_marker(image, x, y, radius=2, color=(255, 0, 0)):
-    """ Draw a circle at the desired coordinate on the image."""
+    """Draw a circle at the desired coordinate on the image."""
     point1 = (x - PATTERN_SIZE / 2, y - PATTERN_SIZE / 2)
     point2 = (x + PATTERN_SIZE / 2, y + PATTERN_SIZE / 2)
 
