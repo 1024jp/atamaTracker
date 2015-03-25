@@ -18,16 +18,16 @@ PATTERN_SIZE = 25  # size of tracking pattern
 
 def main(file_path):
     # load a movie file
-    window_name = os.path.basename(file_path)
+    file_name = os.path.basename(file_path)
     capture = cv2.cv.CreateFileCapture(file_path)
 
     # open a window
     image = _load_image(capture, 0.0)
-    cv2.cv.NamedWindow(window_name)
-    cv2.cv.ShowImage(window_name, image)
+    window = gui.Window(file_name)
+    window.image = image
 
     # click heads' positions on the first frame
-    eventListener = gui.EventListener(window_name)
+    eventListener = gui.EventListener(window.name)
     jj, ii = eventListener.get_xy()
 
     # output
@@ -60,13 +60,13 @@ def main(file_path):
         for idx, (x, y) in enumerate(zip(jj, ii)):
             _draw_marker(image, x, y)
             _dump_result(time + TIME_STEP, idx, x, y)
-
-        cv2.cv.ShowImage(window_name, image)
+   
+        window.image = image
         cv2.waitKey(0)
 
         time += TIME_STEP
 
-    cv2.destroyAllWindows()
+    window.close()
 
 
 def _dump_result(time, idx, x, y):

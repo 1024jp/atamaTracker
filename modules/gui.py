@@ -32,3 +32,29 @@ class EventListener(object):
         if event == cv2.EVENT_LBUTTONDOWN:
             self.xx = numpy.append(self.xx, x)
             self.yy = numpy.append(self.yy, y)
+
+
+class Window(object):
+    def __init__(self, name):
+        self.name = name
+
+        cv2.cv.NamedWindow(self.name)
+
+    def image():
+        doc = "Current image that shown in the window"
+
+        def fget(self):
+            return self.__image
+
+        def fset(self, image):
+            self.__image = image
+            cv2.cv.ShowImage(self.name, image)
+
+        return locals()
+
+    image = property(**image())
+
+    def close(self):
+        """Close window.
+        """
+        cv2.destroyWindow(self.name)
