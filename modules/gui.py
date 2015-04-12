@@ -20,14 +20,21 @@ class EventListener(object):
         self.xx = numpy.array([], dtype=numpy.int)
         self.yy = numpy.array([], dtype=numpy.int)
         self.window = window
+        cv2.setMouseCallback(self.window.name, self.__onMouseClick)
 
     def get_xy(self):
         """Listen mouse event and return clicked coordinates.
         """
-        cv2.setMouseCallback(self.window.name, self.__onMouseClick)
         cv2.waitKey(0)
 
-        return self.xx, self.yy
+        xx = self.xx
+        yy = self.yy
+
+        # reset stored coordinates
+        self.xx = numpy.array([], dtype=numpy.int)
+        self.yy = numpy.array([], dtype=numpy.int)
+
+        return xx, yy
 
     def __onMouseClick(self, event, x, y, flags, param):
         """Mouse event callback.
