@@ -45,6 +45,8 @@ def main(file_path):
         gray_image = _to_grayscale(image)
 
         next_image = _load_image(capture, time + TIME_STEP)
+        if next_image is None:
+            break
         gray_next_image = _to_grayscale(next_image)
 
         # find similar patterns around points of the present frame from
@@ -113,7 +115,7 @@ def _load_image(capture, time_sec):
 
 def _to_grayscale(image):
     """Convert given image to grayscale."""
-    return numpy.asarray(cv2.cv.GetMat(image)).astype(numpy.double)[:, :, 0]
+    return numpy.asarray(cv2.cv.GetMat(image), dtype=numpy.double)[:, :, 0]
 
 
 if __name__ == "__main__":
