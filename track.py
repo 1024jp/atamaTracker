@@ -58,13 +58,21 @@ def main(file_path):
         ii += di
         jj += dj
 
+        # draw found points
+        for x, y in zip(jj, ii):
+            _draw_marker(image, x, y)
+        window.image = image
+
+        # wait for mouse event
+        new_xx, new_yy = eventListener.get_xy()
+
+        # append new coordinates
+        ii = numpy.append(ii, new_yy)
+        jj = numpy.append(jj, new_xx)
+
         # output
         for idx, (x, y) in enumerate(zip(jj, ii)):
-            _draw_marker(image, x, y)
             _dump_result(time + TIME_STEP, idx, x, y)
-
-        window.image = image
-        cv2.waitKey(0)
 
         time += TIME_STEP
 
