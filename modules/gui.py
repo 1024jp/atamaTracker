@@ -14,7 +14,10 @@ class EventListener(object):
     Public properties:
     xx -- numpy array for horizontal positions
     yy -- numpy array for vertical positions
+    isPressed -- boolean whether the left button is pressed
     """
+
+    isPressed = False
 
     def __init__(self, window):
         self.xx = numpy.array([], dtype=numpy.int)
@@ -40,9 +43,16 @@ class EventListener(object):
         """Mouse event callback.
         """
         if event == cv2.EVENT_LBUTTONDOWN:
+            self.isPressed = True
             self.xx = numpy.append(self.xx, x)
             self.yy = numpy.append(self.yy, y)
             self.__draw_circle(x, y)
+
+        elif event == cv2.EVENT_LBUTTONUP:
+            self.isPressed = False
+
+        elif event == cv2.EVENT_MOUSEMOVE and self.isPressed:
+            pass
 
     def __draw_circle(self, x, y, radius=2, color=MARKER_COLOR):
         """Draw a circle at the desired coordinate on the image."""
