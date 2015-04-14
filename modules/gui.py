@@ -4,9 +4,11 @@
 import cv2
 import numpy
 
-# constants
-MARKER_COLOR = (27, 190, 124)  # marker color (BGR)
-MARKER_RADIUS = 2
+
+class Marker:
+    """Marker settings."""
+    COLOR = (27, 190, 124)  # (B, G, R)
+    RADIUS = 2
 
 
 class EventListener(object):
@@ -83,11 +85,11 @@ class Window(object):
     def draw_marker(self, x, y, frame_size=0):
         """Draw a circle at the desired coordinate on the image."""
         image = self.image
-        cv2.cv.Circle(image, (x, y), MARKER_RADIUS, MARKER_COLOR, 2)
+        cv2.cv.Circle(image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
 
         if frame_size > 0:
             point1 = (x - frame_size / 2, y - frame_size / 2)
             point2 = (x + frame_size / 2, y + frame_size / 2)
-            cv2.cv.Rectangle(image, point1, point2, MARKER_COLOR, 1)
+            cv2.cv.Rectangle(image, point1, point2, Marker.COLOR, 1)
 
         self.image = image
