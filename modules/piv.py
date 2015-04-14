@@ -29,49 +29,47 @@ def xcorr_norm(img, kernel):
     return cc_norm
 
 
-def find_flow(img1, img2, ii_all, jj_all,
+def find_flow(img1, img2, i_all, j_all,
               kernel_size=(25, 25), di_range=(-5, 5), dj_range=(-5, 5)):
-    original_shape = ii_all.shape
-    ii_all = ii_all.reshape(ii_all.size)
-    jj_all = jj_all.reshape(jj_all.size)
-    di_all = numpy.zeros(ii_all.size)
-    dj_all = numpy.zeros(ii_all.size)
-    cc_max_all = numpy.zeros(ii_all.size)
+    original_shape = i_all.shape
+    size = i_all.size
+    i_all = i_all.reshape(size)
+    j_all = j_all.reshape(size)
+    di_all = numpy.zeros(size)
+    dj_all = numpy.zeros(size)
+    cc_max_all = numpy.zeros(size)
 
-    for i_point in range(ii_all.size):
-        ii = ii_all[i_point]
-        jj = jj_all[i_point]
-        li_half = (kernel_size[0] - 1) / 2
-        lj_half = (kernel_size[1] - 1) / 2
-        kernel = img1[ii - li_half:ii + li_half + 1,
-                      jj - lj_half:jj + lj_half + 1]
-        img = img2[ii + di_range[0] - li_half:ii + di_range[1] + li_half + 1,
-                   jj + dj_range[0] - lj_half:jj + dj_range[1] + lj_half + 1]
+    li_half = (kernel_size[0] - 1) / 2
+    lj_half = (kernel_size[1] - 1) / 2
+
+    for idx, (i, j) in enumerate(zip(i_all, j_all)):
+        kernel = img1[i - li_half:i + li_half + 1,
+                      j - lj_half:j + lj_half + 1]
+        img = img2[i + di_range[0] - li_half:i + di_range[1] + li_half + 1,
+                   j + dj_range[0] - lj_half:j + dj_range[1] + lj_half + 1]
         cc = xcorr_norm(img, kernel)
         cc_shape = cc.shape
-        (di, dj) = numpy.unravel_index(numpy.argmax(cc), img.shape)
+        di, dj = numpy.unravel_index(numpy.argmax(cc), img.shape)
 
         if (di == 0 or di == cc_shape[0] - 1 or dj == 0 or
                 dj == cc_shape[1] - 1 or numpy.max(cc) < 0.5):
-            di_all[i_point] = 0
-            dj_all[i_point] = 0
-            # cc_max_all[i_point] = 0
-        else:
-            # subpixel analysis
-            cc_C = cc[di, dj]
-            cc_N = cc[di - 1, dj]
-            cc_S = cc[di + 1, dj]
-            cc_W = cc[di, dj - 1]
-            cc_E = cc[di, dj + 1]
-            di = (di - 0.5 * (numpy.log(cc_S) - numpy.log(cc_N)) /
-                  (numpy.log(cc_S) - 2 * numpy.log(cc_C) + numpy.log(cc_N)))
-            dj = (dj - 0.5 * (numpy.log(cc_E) - numpy.log(cc_W)) /
-                  (numpy.log(cc_E) - 2 * numpy.log(cc_C) + numpy.log(cc_W)))
-            di = di - li_half + di_range[0]
-            dj = dj - lj_half + dj_range[0]
-            di_all[i_point] = di
-            dj_all[i_point] = dj
-            cc_max_all[i_point] = cc.max()
+            continue  # all zero
+
+        # subpixel analysis
+        cc_C = cc[di, dj]
+        cc_N = cc[di - 1, dj]
+        cc_S = cc[di + 1, dj]
+        cc_W = cc[di, dj - 1]
+        cc_E = cc[di, dj + 1]
+        di = (di - 0.5 * (numpy.log(cc_S) - numpy.log(cc_N)) /
+              (numpy.log(cc_S) - 2 * numpy.log(cc_C) + numpy.log(cc_N)))
+        dj = (dj - 0.5 * (numpy.log(cc_E) - numpy.log(cc_W)) /
+              (numpy.log(cc_E) - 2 * numpy.log(cc_C) + numpy.log(cc_W)))
+        di += di_range[0] - li_half
+        dj += dj_range[0] - lj_half
+        di_all[idx] = di
+        dj_all[idx] = dj
+        cc_max_all[idx] = cc.max()
 
     di_all.reshape(original_shape)
     dj_all.reshape(original_shape)
