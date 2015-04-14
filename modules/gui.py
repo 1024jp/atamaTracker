@@ -5,7 +5,8 @@ import cv2
 import numpy
 
 # constants
-MARKER_COLOR = (27, 190, 124)
+MARKER_COLOR = (27, 190, 124)  # marker color (BGR)
+MARKER_RADIUS = 2
 
 
 class EventListener(object):
@@ -46,19 +47,13 @@ class EventListener(object):
             self.isPressed = True
             self.xx = numpy.append(self.xx, x)
             self.yy = numpy.append(self.yy, y)
-            self.__draw_circle(x, y)
+            self.window.draw_marker(x, y)
 
         elif event == cv2.EVENT_LBUTTONUP:
             self.isPressed = False
 
         elif event == cv2.EVENT_MOUSEMOVE and self.isPressed:
             pass
-
-    def __draw_circle(self, x, y, radius=2, color=MARKER_COLOR):
-        """Draw a circle at the desired coordinate on the image."""
-        image = self.window.image
-        cv2.cv.Circle(image, (x, y), radius, color, 2)
-        self.window.image = image
 
 
 class Window(object):
@@ -84,3 +79,15 @@ class Window(object):
     def close(self):
         """Close window."""
         cv2.destroyWindow(self.name)
+
+    def draw_marker(self, x, y, frame_size=0):
+        """Draw a circle at the desired coordinate on the image."""
+        image = self.image
+        cv2.cv.Circle(image, (x, y), MARKER_RADIUS, MARKER_COLOR, 2)
+
+        if frame_size > 0:
+            point1 = (x - frame_size / 2, y - frame_size / 2)
+            point2 = (x + frame_size / 2, y + frame_size / 2)
+            cv2.cv.Rectangle(image, point1, point2, MARKER_COLOR, 1)
+
+        self.image = image

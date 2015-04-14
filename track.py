@@ -15,7 +15,6 @@ from modules import gui, piv
 TIME_STEP = 0.1  # time step in second
 FIND_BUFFER = 15  # buffer length to find the pattern in the next frame
 PATTERN_SIZE = 25  # size of tracking pattern
-MARKER_COLOR = (27, 190, 124)  # marker color (BGR)
 
 
 def main(file_path):
@@ -62,8 +61,7 @@ def main(file_path):
 
         # draw found points
         for x, y in zip(jj, ii):
-            _draw_marker(image, x, y)
-        window.image = image
+            window.draw_marker(x, y, PATTERN_SIZE)
 
         # wait for mouse event
         new_xx, new_yy = eventListener.get_xy()
@@ -91,15 +89,6 @@ def _dump_result(time, idx, x, y):
     y -- [int] y coordinate
     """
     print("{} {} {} {}".format(time, idx, y, x))
-
-
-def _draw_marker(image, x, y, radius=2, color=MARKER_COLOR):
-    """Draw a circle at the desired coordinate on the image."""
-    point1 = (x - PATTERN_SIZE / 2, y - PATTERN_SIZE / 2)
-    point2 = (x + PATTERN_SIZE / 2, y + PATTERN_SIZE / 2)
-
-    cv2.cv.Rectangle(image, point1, point2, color, 1)
-    cv2.cv.Circle(image, (x, y), radius, color, 2)
 
 
 def _load_image(capture, time_sec):
