@@ -54,11 +54,15 @@ def main(file_path):
         for idx, point in points.items():
             # find similar pattern around point of the present frame from
             #     the next frame
-            dy, dx = piv.find_point(gray_image, gray_next_image,
-                                    point[1], point[0],
-                                    kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
-                                    di_range=(-FIND_BUFFER, FIND_BUFFER),
-                                    dj_range=(-FIND_BUFFER, FIND_BUFFER))
+            try:
+                dy, dx = piv.find_point(gray_image, gray_next_image,
+                                        point[1], point[0],
+                                        kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
+                                        di_range=(-FIND_BUFFER, FIND_BUFFER),
+                                        dj_range=(-FIND_BUFFER, FIND_BUFFER))
+            except ValueError:  # frame out
+                points.pop(idx, None)
+                continue
 
             # translate position
             point[0] += dx
