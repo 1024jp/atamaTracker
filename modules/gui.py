@@ -6,7 +6,8 @@ import numpy
 
 
 class Marker:
-    """Marker settings."""
+    """Marker settings.
+    """
     COLOR = (27, 190, 124)  # (B, G, R)
     RADIUS = 2
 
@@ -17,10 +18,10 @@ class EventListener(object):
     Public properties:
     xx -- numpy array for horizontal positions
     yy -- numpy array for vertical positions
-    isPressed -- boolean whether the left button is pressed
+    is_pressed -- boolean whether the left button is pressed
     """
 
-    isPressed = False
+    is_pressed = False
 
     def __init__(self, window):
         self.xx = numpy.array([], dtype=numpy.int)
@@ -46,15 +47,15 @@ class EventListener(object):
         """Mouse event callback.
         """
         if event == cv2.EVENT_LBUTTONDOWN:
-            self.isPressed = True
+            self.is_pressed = True
             self.xx = numpy.append(self.xx, x)
             self.yy = numpy.append(self.yy, y)
             self.window.draw_marker(x, y)
 
         elif event == cv2.EVENT_LBUTTONUP:
-            self.isPressed = False
+            self.is_pressed = False
 
-        elif event == cv2.EVENT_MOUSEMOVE and self.isPressed:
+        elif event == cv2.EVENT_MOUSEMOVE and self.is_pressed:
             pass
 
 
@@ -64,7 +65,8 @@ class Window(object):
         cv2.namedWindow(self.name)
 
     def image():
-        """Accessor for image property."""
+        """Accessor for image property.
+        """
         doc = "Current image that shown in the window"
 
         def fget(self):
@@ -79,11 +81,13 @@ class Window(object):
     image = property(**image())
 
     def close(self):
-        """Close window."""
+        """Close window.
+        """
         cv2.destroyWindow(self.name)
 
     def draw_marker(self, x, y, frame_size=0):
-        """Draw a circle at the desired coordinate on the image."""
+        """Draw a circle at the desired coordinate on the image.
+        """
         image = self.image
         cv2.cv.Circle(image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
 

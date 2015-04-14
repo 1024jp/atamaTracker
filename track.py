@@ -103,7 +103,8 @@ def _load_image(capture, time_sec):
 
 
 def _to_grayscale(image):
-    """Convert given image to grayscale."""
+    """Convert given image to grayscale.
+    """
     return numpy.asarray(cv2.cv.GetMat(image), dtype=numpy.double)[:, :, 0]
 
 
