@@ -20,17 +20,17 @@ PATTERN_SIZE = 25  # size of tracking pattern
 def main(file_path):
     # load a movie file
     file_name = os.path.basename(file_path)
-    capture = cv2.cv.CreateFileCapture(file_path)
+    movie = Movie(file_path)
 
     # open a window
-    image = _load_image(capture, 0.0)
+    image = movie.load_image(0.0)
     window = gui.Window(file_name)
     window.image = image
 
     # click heads' positions on the first frame
     eventListener = gui.EventListener(window)
     clicked_points = eventListener.get_xy()
-    
+
     last_index = len(clicked_points) - 1
     points = dict(zip(range(len(clicked_points)), clicked_points))
 
@@ -41,12 +41,12 @@ def main(file_path):
     # process each frame
     time = 0.0
     while True:
-        image = _load_image(capture, time)
+        image = movie.load_image(time)
         if image is None:
             break
         gray_image = _to_grayscale(image)
 
-        next_image = _load_image(capture, time + TIME_STEP)
+        next_image = movie.load_image(time + TIME_STEP)
         if next_image is None:
             break
         gray_next_image = _to_grayscale(next_image)
@@ -57,7 +57,8 @@ def main(file_path):
             try:
                 dy, dx = piv.find_point(gray_image, gray_next_image,
                                         point[1], point[0],
-                                        kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
+                                        kernel_size=(PATTERN_SIZE,
+                                                     PATTERN_SIZE),
                                         di_range=(-FIND_BUFFER, FIND_BUFFER),
                                         dj_range=(-FIND_BUFFER, FIND_BUFFER))
             except ValueError:  # frame out
@@ -100,21 +101,27 @@ def _dump_result(time, idx, x, y):
     print("{} {} {} {}".format(time, idx, y, x))
 
 
-def _load_image(capture, time_sec):
-    """Load image at the desired time.
-
-    Retruns None if no image could load.
-    """
-    cv2.cv.SetCaptureProperty(capture, cv2.cv.CV_CAP_PROP_POS_MSEC,
-                              time_sec * 1000)
-
-    return cv2.cv.QueryFrame(capture)
-
-
 def _to_grayscale(image):
     """Convert given image to grayscale.
     """
     return numpy.asarray(cv2.cv.GetMat(image), dtype=numpy.double)[:, :, 0]
+
+
+class Movie(object):
+    """Movie file object.
+    """
+    def __init__(self, file_path):
+        self.capture = cv2.cv.CreateFileCapture(file_path)
+
+    def load_image(self, time_sec):
+        """Load image at the desired time.
+
+        Retruns None if no image could load.
+        """
+        cv2.cv.SetCaptureProperty(self.capture, cv2.cv.CV_CAP_PROP_POS_MSEC,
+                                  time_sec * 1000)
+
+        return cv2.cv.QueryFrame(self.capture)
 
 
 if __name__ == "__main__":
