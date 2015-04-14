@@ -29,10 +29,13 @@ def main(file_path):
 
     # click heads' positions on the first frame
     eventListener = gui.EventListener(window)
-    points = eventListener.get_xy()
+    clicked_points = eventListener.get_xy()
+    
+    last_index = len(clicked_points) - 1
+    points = dict(zip(range(len(clicked_points)), clicked_points))
 
     # output
-    for idx, (x, y) in enumerate(points):
+    for idx, (x, y) in points.items():
         _dump_result(0.0, idx, x, y)
 
     # process each frame
@@ -48,7 +51,7 @@ def main(file_path):
             break
         gray_next_image = _to_grayscale(next_image)
 
-        for point in points:
+        for idx, point in points.items():
             # find similar pattern around point of the present frame from
             #     the next frame
             dy, dx = piv.find_point(gray_image, gray_next_image,
@@ -68,10 +71,12 @@ def main(file_path):
         new_points = eventListener.get_xy()
 
         # append new points
-        points.extend(new_points)
+        for point in new_points:
+            last_index += 1
+            points[last_index] = point
 
         # output
-        for idx, (x, y) in enumerate(points):
+        for idx, (x, y) in points.items():
             _dump_result(time + TIME_STEP, idx, x, y)
 
         time += TIME_STEP
