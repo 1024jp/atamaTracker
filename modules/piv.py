@@ -43,7 +43,7 @@ def find_point(image1, image2, i, j, kernel_size, di_range, dj_range):
 
     if (di == 0 or di == cc_shape[0] - 1 or dj == 0 or
             dj == cc_shape[1] - 1 or numpy.max(cc) < 0.5):
-        return 0, 0, 0
+        return 0, 0
 
     # subpixel analysis
     cc_C = cc[di, dj]
@@ -58,4 +58,4 @@ def find_point(image1, image2, i, j, kernel_size, di_range, dj_range):
     di += di_range[0] - li_half
     dj += dj_range[0] - lj_half
 
-    return di, dj, cc.max()
+    return int(di), int(dj)

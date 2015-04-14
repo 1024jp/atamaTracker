@@ -29,10 +29,10 @@ def main(file_path):
 
     # click heads' positions on the first frame
     eventListener = gui.EventListener(window)
-    jj, ii = eventListener.get_xy()
+    points = eventListener.get_xy()
 
     # output
-    for idx, (x, y) in enumerate(zip(jj, ii)):
+    for idx, (x, y) in enumerate(points):
         _dump_result(0.0, idx, x, y)
 
     # process each frame
@@ -48,33 +48,30 @@ def main(file_path):
             break
         gray_next_image = _to_grayscale(next_image)
 
-        for idx, (i, j) in enumerate(zip(ii, jj)):
-            # find similar patterns around points of the present frame from
+        for point in points:
+            # find similar pattern around point of the present frame from
             #     the next frame
-            di, dj, ccmax = piv.find_point(gray_image, gray_next_image, i, j,
-                                           kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
-                                           di_range=(-FIND_BUFFER, FIND_BUFFER),
-                                           dj_range=(-FIND_BUFFER, FIND_BUFFER))
+            dy, dx = piv.find_point(gray_image, gray_next_image,
+                                    point[1], point[0],
+                                    kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
+                                    di_range=(-FIND_BUFFER, FIND_BUFFER),
+                                    dj_range=(-FIND_BUFFER, FIND_BUFFER))
 
-            # translate positions
-            i += di
-            j += dj
-            ii[idx] = i
-            jj[idx] = j
+            # translate position
+            point[0] += dx
+            point[1] += dy
 
-        # draw found points
-        for x, y in zip(jj, ii):
-            window.draw_marker(x, y, PATTERN_SIZE)
+            # draw marker
+            window.draw_marker(point[0], point[1], PATTERN_SIZE)
 
         # wait for mouse event
-        new_xx, new_yy = eventListener.get_xy()
+        new_points = eventListener.get_xy()
 
-        # append new coordinates
-        ii = numpy.append(ii, new_yy)
-        jj = numpy.append(jj, new_xx)
+        # append new points
+        points.extend(new_points)
 
         # output
-        for idx, (x, y) in enumerate(zip(jj, ii)):
+        for idx, (x, y) in enumerate(points):
             _dump_result(time + TIME_STEP, idx, x, y)
 
         time += TIME_STEP
