@@ -16,16 +16,14 @@ class EventListener(object):
     """Listener for mouse events
 
     Public properties:
-    xx -- numpy array for horizontal positions
-    yy -- numpy array for vertical positions
+    clicked_points -- list of (x, y) set
     is_pressed -- boolean whether the left button is pressed
     """
 
     is_pressed = False
 
     def __init__(self, window):
-        self.xx = numpy.array([], dtype=numpy.int)
-        self.yy = numpy.array([], dtype=numpy.int)
+        self.clicked_points = []
         self.window = window
         cv2.setMouseCallback(self.window.name, self.__onMouseClick)
 
@@ -34,22 +32,19 @@ class EventListener(object):
         """
         cv2.waitKey(0)
 
-        xx = self.xx
-        yy = self.yy
+        points = self.clicked_points
 
         # reset stored coordinates
-        self.xx = numpy.array([], dtype=numpy.int)
-        self.yy = numpy.array([], dtype=numpy.int)
+        self.clicked_points = []
 
-        return xx, yy
+        return points
 
     def __onMouseClick(self, event, x, y, flags, param):
         """Mouse event callback.
         """
         if event == cv2.EVENT_LBUTTONDOWN:
             self.is_pressed = True
-            self.xx = numpy.append(self.xx, x)
-            self.yy = numpy.append(self.yy, y)
+            self.clicked_points.append([x, y])
             self.window.draw_marker(x, y)
 
         elif event == cv2.EVENT_LBUTTONUP:
