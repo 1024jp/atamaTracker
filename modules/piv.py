@@ -31,7 +31,7 @@ def xcorr_norm(img, kernel):
 
 def find_flow(img1, img2, ii_all, jj_all,
               kernel_size=(25, 25), di_range=(-5, 5), dj_range=(-5, 5)):
-    shape_org = ii_all.shape
+    original_shape = ii_all.shape
     ii_all = ii_all.reshape(ii_all.size)
     jj_all = jj_all.reshape(jj_all.size)
     di_all = numpy.zeros(ii_all.size)
@@ -73,8 +73,8 @@ def find_flow(img1, img2, ii_all, jj_all,
             dj_all[i_point] = dj
             cc_max_all[i_point] = cc.max()
 
-    di_all.reshape(shape_org)
-    dj_all.reshape(shape_org)
-    cc_max_all.reshape(shape_org)
+    di_all.reshape(original_shape)
+    dj_all.reshape(original_shape)
+    cc_max_all.reshape(original_shape)
 
     return di_all, dj_all, cc_max_all
