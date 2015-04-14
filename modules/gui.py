@@ -4,8 +4,12 @@
 import cv2
 import numpy
 
-# constants
-MARKER_COLOR = (27, 190, 124)
+
+class Marker:
+    """Marker settings.
+    """
+    COLOR = (27, 190, 124)  # (B, G, R)
+    RADIUS = 2
 
 
 class EventListener(object):
@@ -14,7 +18,10 @@ class EventListener(object):
     Public properties:
     xx -- numpy array for horizontal positions
     yy -- numpy array for vertical positions
+    is_pressed -- boolean whether the left button is pressed
     """
+
+    is_pressed = False
 
     def __init__(self, window):
         self.xx = numpy.array([], dtype=numpy.int)
@@ -40,15 +47,16 @@ class EventListener(object):
         """Mouse event callback.
         """
         if event == cv2.EVENT_LBUTTONDOWN:
+            self.is_pressed = True
             self.xx = numpy.append(self.xx, x)
             self.yy = numpy.append(self.yy, y)
-            self.__draw_circle(x, y)
+            self.window.draw_marker(x, y)
 
-    def __draw_circle(self, x, y, radius=2, color=MARKER_COLOR):
-        """Draw a circle at the desired coordinate on the image."""
-        image = self.window.image
-        cv2.cv.Circle(image, (x, y), radius, color, 2)
-        self.window.image = image
+        elif event == cv2.EVENT_LBUTTONUP:
+            self.is_pressed = False
+
+        elif event == cv2.EVENT_MOUSEMOVE and self.is_pressed:
+            pass
 
 
 class Window(object):
@@ -57,7 +65,8 @@ class Window(object):
         cv2.namedWindow(self.name)
 
     def image():
-        """Accessor for image property."""
+        """Accessor for image property.
+        """
         doc = "Current image that shown in the window"
 
         def fget(self):
@@ -72,5 +81,19 @@ class Window(object):
     image = property(**image())
 
     def close(self):
-        """Close window."""
+        """Close window.
+        """
         cv2.destroyWindow(self.name)
+
+    def draw_marker(self, x, y, frame_size=0):
+        """Draw a circle at the desired coordinate on the image.
+        """
+        image = self.image
+        cv2.cv.Circle(image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
+
+        if frame_size > 0:
+            point1 = (x - frame_size / 2, y - frame_size / 2)
+            point2 = (x + frame_size / 2, y + frame_size / 2)
+            cv2.cv.Rectangle(image, point1, point2, Marker.COLOR, 1)
+
+        self.image = image
