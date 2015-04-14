@@ -29,22 +29,6 @@ def xcorr_norm(img, kernel):
     return cc_norm
 
 
-def find_flow(image1, image2, i_all, j_all,
-              kernel_size=(25, 25), di_range=(-5, 5), dj_range=(-5, 5)):
-    di_all = numpy.zeros(i_all.size)
-    dj_all = numpy.zeros(i_all.size)
-    cc_max_all = numpy.zeros(i_all.size)
-
-    for idx, (i, j) in enumerate(zip(i_all, j_all)):
-        di, dj, cc_max = find_point(image1, image2, i, j, kernel_size,
-                                    di_range, dj_range)
-        di_all[idx] = di
-        dj_all[idx] = dj
-        cc_max_all[idx] = cc_max
-
-    return di_all, dj_all, cc_max_all
-
-
 def find_point(image1, image2, i, j, kernel_size, di_range, dj_range):
     li_half = (kernel_size[0] - 1) / 2
     lj_half = (kernel_size[1] - 1) / 2

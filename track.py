@@ -48,16 +48,19 @@ def main(file_path):
             break
         gray_next_image = _to_grayscale(next_image)
 
-        # find similar patterns around points of the present frame from
-        #     the next frame
-        di, dj, ccmax = piv.find_flow(gray_image, gray_next_image, ii, jj,
-                                      kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
-                                      di_range=(-FIND_BUFFER, FIND_BUFFER),
-                                      dj_range=(-FIND_BUFFER, FIND_BUFFER))
+        for idx, (i, j) in enumerate(zip(ii, jj)):
+            # find similar patterns around points of the present frame from
+            #     the next frame
+            di, dj, ccmax = piv.find_point(gray_image, gray_next_image, i, j,
+                                           kernel_size=(PATTERN_SIZE, PATTERN_SIZE),
+                                           di_range=(-FIND_BUFFER, FIND_BUFFER),
+                                           dj_range=(-FIND_BUFFER, FIND_BUFFER))
 
-        # translate positions
-        ii += di
-        jj += dj
+            # translate positions
+            i += di
+            j += dj
+            ii[idx] = i
+            jj[idx] = j
 
         # draw found points
         for x, y in zip(jj, ii):
