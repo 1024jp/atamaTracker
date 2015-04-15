@@ -1,7 +1,10 @@
 Change Log
 ==========
 
-- [new] Dwaw clicked points
+v1.0.0 (2015-04-15)
+------------------
+
+- [new] Draw clicked points
 - [new] Support appending tracking points while detection
 - [mod] End tracking automatically at the end of the given movie.
 - [mod] Draw tracking area

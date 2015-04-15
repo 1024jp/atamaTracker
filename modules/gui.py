@@ -69,7 +69,7 @@ class Window(object):
 
         def fset(self, image):
             self.__image = image
-            cv2.cv.ShowImage(self.name, image)
+            cv2.imshow(self.name, image)
 
         return locals()
 
@@ -84,11 +84,11 @@ class Window(object):
         """Draw a circle at the desired coordinate on the image.
         """
         image = self.image
-        cv2.cv.Circle(image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
+        cv2.circle(image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
 
         if frame_size > 0:
             point1 = (x - frame_size / 2, y - frame_size / 2)
             point2 = (x + frame_size / 2, y + frame_size / 2)
-            cv2.cv.Rectangle(image, point1, point2, Marker.COLOR, 1)
+            cv2.rectangle(image, point1, point2, Marker.COLOR, 1)
 
         self.image = image

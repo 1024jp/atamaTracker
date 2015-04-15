@@ -30,13 +30,27 @@ def xcorr_norm(img, kernel):
 
 
 def find_point(image1, image2, i, j, kernel_size, di_range, dj_range):
+    """Find the similar pattern of (j, i) in image1 from image2.
+
+    image1 -- [image] image to refer to the pattern as numpy.ndarray
+    image2 -- [image] image to find the pattern as numpy.ndarray
+    i -- [int] vertical coordinate of pattern center
+    j -- [int] horizontal coordinate of pattern center
+    kernel_size -- [(int, int)] pattern size
+    di_range -- [(int, int)] vertical buffer length to find
+    dj_range -- [(int, int)] horizontal buffer length fo find
+    """
+    # cast images
+    image1 = image1.astype(numpy.double)
+    image2 = image2.astype(numpy.double)
+    
     li_half = (kernel_size[0] - 1) / 2
     lj_half = (kernel_size[1] - 1) / 2
 
-    kernel = image1[i - li_half:i + li_half + 1,
-                    j - lj_half:j + lj_half + 1]
-    image = image2[i - li_half + di_range[0]:i + li_half + 1 + di_range[1],
-                   j - lj_half + dj_range[0]:j + lj_half + 1 + dj_range[1]]
+    kernel = image1[i - li_half : i + li_half + 1,
+                    j - lj_half : j + lj_half + 1]
+    image = image2[i - li_half + di_range[0] : i + li_half + 1 + di_range[1],
+                   j - lj_half + dj_range[0] : j + lj_half + 1 + dj_range[1]]
     cc = xcorr_norm(image, kernel)
     cc_shape = cc.shape
     di, dj = numpy.unravel_index(numpy.argmax(cc), image.shape)
