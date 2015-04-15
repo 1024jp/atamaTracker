@@ -43,6 +43,12 @@ AtamaTracker
     - 結果の表示
 
 
+## Coding Style
+
+- PEP8 に沿う
+- できるだけ Python3 っぽく書く (実態は Python2 だけど
+
+
 ## License
 
 © 2015 Manabu TANGE.
