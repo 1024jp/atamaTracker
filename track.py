@@ -47,6 +47,8 @@ def main(file_path):
         if image is None or next_image is None:
             break
 
+        window.image = image
+
         for idx, point in points.items():
             # find similar pattern to the current frame from the next frame
             try:
@@ -66,7 +68,6 @@ def main(file_path):
             point[1] += dy
 
             # draw marker
-            window.image = image
             window.draw_marker(point[0], point[1], PATTERN_SIZE)
 
         # wait for mouse event
