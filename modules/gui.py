@@ -24,7 +24,7 @@ class EventListener(object):
     def __init__(self, window):
         self.clicked_points = []
         self.window = window
-        cv2.setMouseCallback(self.window.name, self.__onMouseClick)
+        cv2.setMouseCallback(self.window.name, self.__on_mouse_click)
 
     def get_xy(self):
         """Listen mouse event and return clicked coordinates.
@@ -38,7 +38,7 @@ class EventListener(object):
 
         return points
 
-    def __onMouseClick(self, event, x, y, flags, param):
+    def __on_mouse_click(self, event, x, y, flags, param):
         """Mouse event callback.
         """
         if event == cv2.EVENT_LBUTTONDOWN:
