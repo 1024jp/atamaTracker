@@ -41,21 +41,17 @@ def main(file_path):
     # process each frame
     time = 0.0
     while True:
+        # load images
         image = movie.load_image(time)
-        if image is None:
-            break
-        gray_image = _to_grayscale(image)
-
         next_image = movie.load_image(time + TIME_STEP)
-        if next_image is None:
+        if image is None or next_image is None:
             break
-        gray_next_image = _to_grayscale(next_image)
 
         for idx, point in points.items():
-            # find similar pattern around point of the present frame from
-            #     the next frame
+            # find similar pattern to the current frame from the next frame
             try:
-                dy, dx = piv.find_point(gray_image, gray_next_image,
+                dy, dx = piv.find_point(_to_grayscale(image),
+                                        _to_grayscale(next_image),
                                         point[1], point[0],
                                         kernel_size=(PATTERN_SIZE,
                                                      PATTERN_SIZE),
@@ -70,6 +66,7 @@ def main(file_path):
             point[1] += dy
 
             # draw marker
+            window.image = image
             window.draw_marker(point[0], point[1], PATTERN_SIZE)
 
         # wait for mouse event
@@ -104,24 +101,24 @@ def _dump_result(time, idx, x, y):
 def _to_grayscale(image):
     """Convert given image to grayscale.
     """
-    return numpy.asarray(cv2.cv.GetMat(image), dtype=numpy.double)[:, :, 0]
+    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 
 class Movie(object):
     """Movie file object.
     """
     def __init__(self, file_path):
-        self.capture = cv2.cv.CreateFileCapture(file_path)
+        self.__capture = cv2.VideoCapture(file_path)
 
     def load_image(self, time_sec):
         """Load image at the desired time.
 
         Retruns None if no image could load.
         """
-        cv2.cv.SetCaptureProperty(self.capture, cv2.cv.CV_CAP_PROP_POS_MSEC,
-                                  time_sec * 1000)
+        self.__capture.set(cv2.cv.CV_CAP_PROP_POS_MSEC, time_sec * 1000)
+        f, image = self.__capture.read()
 
-        return cv2.cv.QueryFrame(self.capture)
+        return image
 
 
 if __name__ == "__main__":
