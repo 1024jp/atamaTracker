@@ -2,7 +2,6 @@
 """
 
 import cv2
-import numpy
 
 
 class Marker:
