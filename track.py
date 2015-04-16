@@ -8,7 +8,7 @@ import sys
 import cv2
 import numpy
 
-from modules import gui, piv
+from modules import gui, moviefile, piv
 
 
 # constants
@@ -20,7 +20,7 @@ PATTERN_SIZE = 25  # size of tracking pattern
 def main(file_path):
     # load a movie file
     file_name = os.path.basename(file_path)
-    movie = Movie(file_path)
+    movie = moviefile.Movie(file_path)
 
     # open a window
     image = movie.load_image(0.0)
@@ -103,23 +103,6 @@ def _to_grayscale(image):
     """Convert given image to grayscale.
     """
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-
-class Movie(object):
-    """Movie file object.
-    """
-    def __init__(self, file_path):
-        self.__capture = cv2.VideoCapture(file_path)
-
-    def load_image(self, time_sec):
-        """Load image at the desired time.
-
-        Retruns None if no image could load.
-        """
-        self.__capture.set(cv2.cv.CV_CAP_PROP_POS_MSEC, time_sec * 1000)
-        f, image = self.__capture.read()
-
-        return image
 
 
 if __name__ == "__main__":
