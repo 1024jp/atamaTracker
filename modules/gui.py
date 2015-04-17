@@ -3,6 +3,8 @@
 
 import cv2
 
+from .geometry import Point
+
 
 class Marker:
     """Marker settings.
@@ -15,7 +17,7 @@ class EventListener(object):
     """Listener for mouse events
 
     Public properties:
-    clicked_points -- list of (x, y) set
+    clicked_points -- list of Point instances
     is_pressed -- boolean whether the left button is pressed
     """
 
@@ -42,9 +44,10 @@ class EventListener(object):
         """Mouse event callback.
         """
         if event == cv2.EVENT_LBUTTONDOWN:
+            point = Point(x, y)
             self.is_pressed = True
-            self.clicked_points.append([x, y])
-            self.window.draw_marker(x, y)
+            self.clicked_points.append(point)
+            self.window.draw_marker(point.x, point.y)
             self.window.display()
 
         elif event == cv2.EVENT_LBUTTONUP:

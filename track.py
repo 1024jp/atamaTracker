@@ -9,6 +9,7 @@ import cv2
 import numpy
 
 from modules import gui, moviefile, piv
+from modules.geometry import Point
 
 
 # constants
@@ -36,8 +37,8 @@ def main(file_path):
     points = dict(zip(range(len(clicked_points)), clicked_points))
 
     # output
-    for idx, (x, y) in points.items():
-        _dump_result(0.0, idx, x, y)
+    for idx, point in points.items():
+        _dump_result(0.0, idx, point.x, point.y)
 
     # process each frame
     time = 0.0
@@ -55,7 +56,7 @@ def main(file_path):
             try:
                 dy, dx = piv.find_point(_to_grayscale(image),
                                         _to_grayscale(next_image),
-                                        point[1], point[0],
+                                        point.y, point.x,
                                         kernel_size=(PATTERN_SIZE,
                                                      PATTERN_SIZE),
                                         di_range=(-FIND_BUFFER, FIND_BUFFER),
@@ -65,11 +66,13 @@ def main(file_path):
                 continue
 
             # translate position
-            point[0] += dx
-            point[1] += dy
+            point.move(dx, dy)
+
+            # raise flag
+            point.isAutoDetected = True
 
             # draw marker
-            window.draw_marker(point[0], point[1], PATTERN_SIZE)
+            window.draw_marker(point.x, point.y, PATTERN_SIZE)
 
         window.display()
 
@@ -82,8 +85,8 @@ def main(file_path):
             points[last_index] = point
 
         # output
-        for idx, (x, y) in points.items():
-            _dump_result(time + TIME_STEP, idx, x, y)
+        for idx, point in points.items():
+            _dump_result(time + TIME_STEP, idx, point.x, point.y)
 
         time += TIME_STEP
 
