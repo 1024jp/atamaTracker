@@ -45,6 +45,7 @@ class EventListener(object):
             self.is_pressed = True
             self.clicked_points.append([x, y])
             self.window.draw_marker(x, y)
+            self.window.display()
 
         elif event == cv2.EVENT_LBUTTONUP:
             self.is_pressed = False
@@ -54,40 +55,33 @@ class EventListener(object):
 
 
 class Window(object):
+    """Window object.
+
+    Public properties:
+    name -- [string] Window name
+    image -- [string] Current image that shown in the window
+    """
+
     def __init__(self, name):
         self.name = name
         cv2.namedWindow(self.name)
-
-    def image():
-        """Accessor for image property.
-        """
-        doc = "Current image that shown in the window"
-
-        def fget(self):
-            return self.__image
-
-        def fset(self, image):
-            self.__image = image
-            cv2.imshow(self.name, image)
-
-        return locals()
-
-    image = property(**image())
 
     def close(self):
         """Close window.
         """
         cv2.destroyWindow(self.name)
 
+    def display(self):
+        """Update window contents.
+        """
+        cv2.imshow(self.name, self.image)
+
     def draw_marker(self, x, y, frame_size=0):
         """Draw a circle at the desired coordinate on the image.
         """
-        image = self.image
-        cv2.circle(image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
+        cv2.circle(self.image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
 
         if frame_size > 0:
             point1 = (x - frame_size / 2, y - frame_size / 2)
             point2 = (x + frame_size / 2, y + frame_size / 2)
-            cv2.rectangle(image, point1, point2, Marker.COLOR, 1)
-
-        self.image = image
+            cv2.rectangle(self.image, point1, point2, Marker.COLOR, 1)

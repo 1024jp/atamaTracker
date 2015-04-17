@@ -26,6 +26,7 @@ def main(file_path):
     image = movie.load_image(0.0)
     window = gui.Window(file_name)
     window.image = image
+    window.display()
 
     # click heads' positions on the first frame
     eventListener = gui.EventListener(window)
@@ -69,6 +70,8 @@ def main(file_path):
 
             # draw marker
             window.draw_marker(point[0], point[1], PATTERN_SIZE)
+
+        window.display()
 
         # wait for mouse event
         new_points = eventListener.get_xy()
