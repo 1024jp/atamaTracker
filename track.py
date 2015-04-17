@@ -25,6 +25,7 @@ def init_detector():
 
 
 def main(file_path):
+    time = 0.0
     init_detector()
 
     # load a movie file
@@ -32,7 +33,7 @@ def main(file_path):
     movie = moviefile.Movie(file_path)
 
     # open a window
-    image = movie.load_image(0.0)
+    image = movie.load_image(time)
     window = gui.Window(file_name)
     window.image = image
     window.display()
@@ -46,19 +47,20 @@ def main(file_path):
 
     # output
     for idx, point in points.items():
-        _dump_result(0.0, idx, point.x, point.y)
+        _dump_result(time, idx, point.x, point.y)
 
     # process each frame
-    time = 0.0
     while True:
+        time += TIME_STEP
+
         # load images
+        prev_image = movie.load_image(time - TIME_STEP)
         image = movie.load_image(time)
-        next_image = movie.load_image(time + TIME_STEP)
-        if image is None or next_image is None:
+        if prev_image is None or image is None:
             break
 
         window.image = image
-        detector = PatternDetector(image, next_image)
+        detector = PatternDetector(prev_image, image)
 
         for idx, point in points.items():
             # find similar pattern to the current frame from the next frame
@@ -89,9 +91,7 @@ def main(file_path):
 
         # output
         for idx, point in points.items():
-            _dump_result(time + TIME_STEP, idx, point.x, point.y)
-
-        time += TIME_STEP
+            _dump_result(time, idx, point.x, point.y)
 
     window.close()
 
