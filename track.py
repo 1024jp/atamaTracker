@@ -5,11 +5,9 @@
 import os.path
 import sys
 
-import cv2
-import numpy
-
-from modules import gui, moviefile, piv
+from modules import gui, moviefile
 from modules.geometry import Point
+from modules.detector import PatternDetector
 
 
 # constants
@@ -18,7 +16,17 @@ FIND_BUFFER = 15  # buffer length to find the pattern in the next frame
 PATTERN_SIZE = 25  # size of tracking pattern
 
 
+def init_detector():
+    """initialize PatternDetector class.
+    """
+    PatternDetector.kernel_size = (PATTERN_SIZE, PATTERN_SIZE)
+    PatternDetector.dx_range = (-FIND_BUFFER, FIND_BUFFER)
+    PatternDetector.dy_range = (-FIND_BUFFER, FIND_BUFFER)
+
+
 def main(file_path):
+    init_detector()
+
     # load a movie file
     file_name = os.path.basename(file_path)
     movie = moviefile.Movie(file_path)
@@ -50,17 +58,12 @@ def main(file_path):
             break
 
         window.image = image
+        detector = PatternDetector(image, next_image)
 
         for idx, point in points.items():
             # find similar pattern to the current frame from the next frame
             try:
-                dy, dx = piv.find_point(_to_grayscale(image),
-                                        _to_grayscale(next_image),
-                                        point.y, point.x,
-                                        kernel_size=(PATTERN_SIZE,
-                                                     PATTERN_SIZE),
-                                        di_range=(-FIND_BUFFER, FIND_BUFFER),
-                                        dj_range=(-FIND_BUFFER, FIND_BUFFER))
+                dx, dy = detector.detect(point.x, point.y)
             except ValueError:  # frame out
                 points.pop(idx, None)
                 continue
@@ -103,12 +106,6 @@ def _dump_result(time, idx, x, y):
     y -- [int] y coordinate
     """
     print("{} {} {} {}".format(time, idx, y, x))
-
-
-def _to_grayscale(image):
-    """Convert given image to grayscale.
-    """
-    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 
 if __name__ == "__main__":

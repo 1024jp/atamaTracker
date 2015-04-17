@@ -72,4 +72,4 @@ def find_point(image1, image2, i, j, kernel_size, di_range, dj_range):
     di += di_range[0] - li_half
     dj += dj_range[0] - lj_half
 
-    return int(di), int(dj)
+    return di, dj
