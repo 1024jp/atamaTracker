@@ -11,6 +11,9 @@ class Movie(object):
     def __init__(self, file_path):
         self.__capture = cv2.VideoCapture(file_path)
 
+    def __del__(self):
+        self.__capture.release()
+
     def load_image(self, time_sec):
         """Load image at the desired time.
 
