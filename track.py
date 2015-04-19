@@ -23,7 +23,7 @@ def main(file_path):
     config_manager.load_config(file_path)
     config = config_manager.config
     setup(config)
-    
+
     time = 0.0
     last_index = -1
     points = dict()

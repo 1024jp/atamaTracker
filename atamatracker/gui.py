@@ -17,8 +17,8 @@ class EventListener(object):
     """Listener for mouse events
 
     Public properties:
-    clicked_points -- list of Point instances
-    is_pressed -- boolean whether the left button is pressed
+    clicked_points -- [list] List of Point instances
+    is_pressed -- [bool] Boolean whether the left button is pressed
     """
 
     is_pressed = False
@@ -61,8 +61,8 @@ class Window(object):
     """Window object.
 
     Public properties:
-    name -- [string] Window name
-    image -- [string] Current image that shown in the window
+    name -- [str] Window name
+    image -- [str] Current image that shown in the window
     """
 
     def __init__(self, name):

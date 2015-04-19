@@ -16,11 +16,11 @@ def xcorr_norm(image, kernel):
     """Perform the normalized cross-correlation.
 
     Parameters:
-    image -- [ndarray] base image to match
-    kernel -- [ndarray] small image template to search
+    image -- [ndarray] Base image to match
+    kernel -- [ndarray] Small image template to search
 
     Returns:
-    cc -- [ndarray] cross-correlation map
+    cc -- [ndarray] Cross-correlation map
     """
     kernel = kernel - scipy.mean(kernel)
     kernel = kernel / scipy.sqrt(scipy.sum(kernel ** 2))
@@ -41,17 +41,17 @@ def find_point(image1, image2, i, j, kernel_size, di_range, dj_range):
     """Find the similar pattern of (j, i) in image1 from image2.
 
     Parameters:
-    image1 -- [image] image to refer to the pattern as numpy.ndarray
-    image2 -- [image] image to find the pattern as numpy.ndarray
-    i -- [int] vertical coordinate of pattern center
-    j -- [int] horizontal coordinate of pattern center
-    kernel_size -- [(int, int)] pattern size
-    di_range -- [(int, int)] vertical buffer length to find
-    dj_range -- [(int, int)] horizontal buffer length to find
+    image1 -- [image] Image to refer to the pattern as numpy.ndarray
+    image2 -- [image] Image to find the pattern as numpy.ndarray
+    i -- [int] Vertical coordinate of pattern center
+    j -- [int] Horizontal coordinate of pattern center
+    kernel_size -- [int, int] Pattern size
+    di_range -- [int, int] Vertical buffer length to find
+    dj_range -- [int, int] Horizontal buffer length to find
 
     Returns:
-    di -- vertical delta of pattern from image1 to image2
-    dj -- horizontal delta of pattern from image1 to image2
+    di -- Vertical delta of pattern from image1 to image2
+    dj -- Horizontal delta of pattern from image1 to image2
     """
     li_half = (kernel_size[0] - 1) / 2
     lj_half = (kernel_size[1] - 1) / 2

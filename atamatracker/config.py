@@ -11,7 +11,7 @@ class Config(object):
     """Read-only config object for AtamaTracker.
 
     Public properties:
-    section -- ini file's section name to be read.
+    section -- [str] Ini file's section name to be read
     """
 
     section = 'tracking'
@@ -40,10 +40,10 @@ class Config(object):
 
 class ConfigManager(object):
     """Create parsed ini data.
-    
+
     Constants:
-    DEFAULT_FILENAME -- file name in which the default values are written.
-    FILENAME -- file name of the config file.
+    DEFAULT_FILENAME -- [str] File name in which the default values are written
+    FILENAME -- [str] File name of the config file
 
     Public properties:
     config -- Config object with parsed data.
@@ -51,7 +51,7 @@ class ConfigManager(object):
 
     DEFAULT_FILENAME = 'DEFAULTS.ini'
     FILENAME = 'config.ini'
-    
+
     def __init__(self):
         self.parser = ConfigParser.SafeConfigParser()
         self.__read_defaults()

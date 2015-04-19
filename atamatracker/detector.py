@@ -16,13 +16,13 @@ class PatternDetector(object):
     """Find similar patterns in image1 from image2.
 
     Public properties:
-    kernel_size -- [(int, int)] pattern size
-    dx_range -- [(int, int)] horizontal buffer length to find
-    dy_range -- [(int, int)] vertical buffer length to find
+    kernel_size -- [int, int] Pattern size
+    dx_range -- [int, int] Horizontal buffer length to find
+    dy_range -- [int, int] Vertical buffer length to find
 
     Arguments:
-    image1 -- [image] image to refer to the pattern as numpy.ndarray
-    image2 -- [image] image to find the pattern as numpy.ndarray
+    image1 -- [image] Image to refer to the pattern as numpy.ndarray
+    image2 -- [image] Image to find the pattern as numpy.ndarray
     """
 
     kernel_size = (25, 25)
