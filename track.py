@@ -6,7 +6,6 @@ import os.path
 import sys
 
 from atamatracker import gui, moviefile
-from atamatracker.geometry import Point
 from atamatracker.detector import PatternDetector
 
 
