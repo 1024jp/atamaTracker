@@ -8,13 +8,6 @@ AtamaTracker
 - numpy
 
 
-## Contents
-
-- track.py：メインファイル
-- modules/gui.py：マウスイベントと GUI 表示のためのモジュール
-- modules/piv.py：パターンマッチングのモジュール（流体解析用）
-
-
 ## Usage
 
 - リポジトリのルートディレクトリに移動
@@ -45,8 +38,9 @@ AtamaTracker
 
 ## Coding Style
 
-- PEP8 に沿う
-- できるだけ Python3 っぽく書く (実態は Python2 だけど
+- Follow PEP8 guidelines
+- Use Python3-compatible syntax as possible
+- Use the cv2 API instead of the cv one as possible
 
 
 ## License
