@@ -4,6 +4,8 @@ Change Log
 develop
 ------------------
 
+- [new] Now, project dependent values can be set in config.ini file.
+    - See config/default.ini for the available options.
 - [fix] Fix an issue that displayed slices were the previous one while processing.
 
 
