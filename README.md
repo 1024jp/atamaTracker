@@ -22,8 +22,16 @@ AtamaTracker
 
 ## Customize
 
-- track.py 16 行目の `FIND_BUFFER` は捜索範囲の縦横ピクセル数
-- track.py 17 行目の `PATTERN_SIZE` は捜索対象の縦横ピクセル数（パターンの大きさ）
+Some values can be set in a local config.ini file for individual projects.
+
+### How To
+1. Copy `config/defaults.ini` file.
+2. Rename it to `config.ini`.
+3. Place config.ini in the same directory of the source movie file,
+   or the parent directory of the source.
+4. Modify config.ini file following the instructions in it.
+    - The values in the `config/defaults.ini` are used if you don't set values
+      in your config.ini.
 
 
 ## How It Works

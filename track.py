@@ -5,30 +5,28 @@
 import os.path
 import sys
 
+from atamatracker.config import manager as config_manager
 from atamatracker import gui, moviefile
 from atamatracker.detector import PatternDetector
 
 
-# constants
-TIME_STEP = 0.1  # time step in second
-FIND_BUFFER = 15  # buffer length to find the pattern in the next frame
-PATTERN_SIZE = 25  # size of tracking pattern
-
-
-def init_detector():
+def setup(config):
     """initialize PatternDetector class.
     """
-    PatternDetector.kernel_size = (PATTERN_SIZE, PATTERN_SIZE)
-    PatternDetector.dx_range = (-FIND_BUFFER, FIND_BUFFER)
-    PatternDetector.dy_range = (-FIND_BUFFER, FIND_BUFFER)
+    PatternDetector.kernel_size = (config.pattern_size, config.pattern_size)
+    PatternDetector.dx_range = (-config.find_buffer, config.find_buffer)
+    PatternDetector.dy_range = (-config.find_buffer, config.find_buffer)
 
 
 def main(file_path):
+    # setup with config file
+    config_manager.load_config(file_path)
+    config = config_manager.config
+    setup(config)
+    
     time = 0.0
     last_index = -1
     points = dict()
-
-    init_detector()
 
     # load a movie file
     movie = moviefile.Movie(file_path)
@@ -48,7 +46,7 @@ def main(file_path):
 
         # auto-track points
         if points:
-            prev_image = movie.load_image(time - TIME_STEP)
+            prev_image = movie.load_image(time - config.time_step)
             if prev_image is None:
                 break
             detector = PatternDetector(prev_image, image)
@@ -63,7 +61,7 @@ def main(file_path):
                 point.move(dx, dy)
                 point.isAutoDetected = True
 
-                window.draw_marker(point.x, point.y, PATTERN_SIZE)
+                window.draw_marker(point.x, point.y, config.pattern_size)
 
         window.display()
 
@@ -79,7 +77,7 @@ def main(file_path):
         for idx, point in points.items():
             _dump_result(time, idx, point.x, point.y)
 
-        time += TIME_STEP
+        time += config.time_step
 
     window.close()
 
