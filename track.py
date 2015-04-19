@@ -5,9 +5,9 @@
 import os.path
 import sys
 
-from modules import gui, moviefile
-from modules.geometry import Point
-from modules.detector import PatternDetector
+from atamatracker import gui, moviefile
+from atamatracker.geometry import Point
+from atamatracker.detector import PatternDetector
 
 
 # constants
