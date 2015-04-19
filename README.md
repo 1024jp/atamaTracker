@@ -22,15 +22,15 @@ AtamaTracker
 
 ## Customize
 
-Some values can be set in a local config.ini file for individual projects.
+Some values can be set in a local config.ini file for each individual project.
 
 ### How To
-1. Copy `config/defaults.ini` file.
+1. Copy `config/DEFAULTS.ini` file.
 2. Rename it to `config.ini`.
 3. Place config.ini in the same directory of the source movie file,
    or the parent directory of the source.
 4. Modify config.ini file following the instructions in it.
-    - The values in the `config/defaults.ini` are used if you don't set values
+    - The values in the `config/DEFAULTS.ini` are used if you don't set values
       in your config.ini.
 
 

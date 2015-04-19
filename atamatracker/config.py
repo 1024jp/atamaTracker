@@ -49,7 +49,7 @@ class ConfigManager(object):
     config -- Config object with parsed data.
     """
 
-    DEFAULT_FILENAME = 'defaults.ini'
+    DEFAULT_FILENAME = 'DEFAULTS.ini'
     FILENAME = 'config.ini'
     
     def __init__(self):
