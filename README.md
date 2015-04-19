@@ -48,4 +48,4 @@ AtamaTracker
 © 2015 Manabu TANGE.
 © 2015 1024jp.
 
-The source code is licensed under the terms of the MIT License. See the bundled [LICENSE]() for details.
+The source code is licensed under the terms of the MIT License. See the bundled [LICENSE](LICENSE) for details.
