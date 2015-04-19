@@ -1,6 +1,7 @@
 """Geometric objects
 """
 
+
 class Point(object):
     """X and Y coordinate set.
 
@@ -19,6 +20,7 @@ class Point(object):
         return "Point({}, {})".format(self.x, self.y)
 
     def move(self, dx, dy):
-        """Translate point."""
+        """Translate point.
+        """
         self.x += dx
         self.y += dy

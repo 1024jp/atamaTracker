@@ -13,14 +13,18 @@ def _to_grayscale(image):
 
 
 class PatternDetector(object):
-    """Find the similar pattern in image1 from image2.
+    """Find similar patterns in image1 from image2.
 
+    Public properties:
+    kernel_size -- [(int, int)] pattern size
+    dx_range -- [(int, int)] horizontal buffer length to find
+    dy_range -- [(int, int)] vertical buffer length to find
+
+    Arguments:
     image1 -- [image] image to refer to the pattern as numpy.ndarray
     image2 -- [image] image to find the pattern as numpy.ndarray
-    kernel_size -- [(int, int)] pattern size
-    dx_range -- [(int, int)] horizontal buffer length fo find
-    dy_range -- [(int, int)] vertical buffer length to find
     """
+
     kernel_size = (25, 25)
     dx_range = (-5, 5)
     dy_range = (-5, 5)
