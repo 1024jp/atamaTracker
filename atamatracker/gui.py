@@ -46,15 +46,25 @@ class EventListener(object):
         if event == cv2.EVENT_LBUTTONDOWN:
             point = Point(x, y)
             self.is_pressed = True
-            self.clicked_points.append(point)
-            self.window.draw_marker(point.x, point.y)
-            self.window.display()
+            if not self.__is_clicked(point):
+                self.clicked_points.append(point)
+                self.window.draw_marker(point.x, point.y)
+                self.window.display()
 
         elif event == cv2.EVENT_LBUTTONUP:
             self.is_pressed = False
 
         elif event == cv2.EVENT_MOUSEMOVE and self.is_pressed:
             pass
+
+    def __is_clicked(self, point):
+        """Check whether the given point has already been clicked.
+        """
+        for p in self.clicked_points:
+            if p.distance(point) <= Marker.RADIUS + 2:  # +2 for buffer
+                return point
+
+        return None
 
 
 class Window(object):

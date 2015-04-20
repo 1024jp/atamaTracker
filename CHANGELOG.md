@@ -6,6 +6,7 @@ develop
 
 - [new] Now, project dependent values can be set in config.ini file.
     - See config/default.ini for the available options.
+- [mod] Ignore if added tracking point is already clicked.
 - [fix] Fix an issue that displayed slices were the previous one while processing.
 
 
