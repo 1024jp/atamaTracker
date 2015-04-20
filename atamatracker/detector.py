@@ -4,6 +4,7 @@
 import cv2
 
 from . import piv
+from .geometry import Point
 
 
 def _to_grayscale(image):
@@ -33,9 +34,18 @@ class PatternDetector(object):
         self._image1 = _to_grayscale(image1)
         self._image2 = _to_grayscale(image2)
 
-    def detect(self, x, y):
-        dy, dx = piv.find_point(self._image1, self._image2, y, x,
-                                pattern_size=self.pattern_size,
-                                di_range=self.dy_range, dj_range=self.dx_range)
+    def detect(self, point):
+        """Find similar pattens in image1 from image2.
 
-        return int(dx), int(dy)
+        Return:
+        point -- [Point] Found point
+        """
+        try:
+            dy, dx = piv.find_point(self._image1, self._image2, point.y,
+                                    point.x, pattern_size=self.pattern_size,
+                                    di_range=self.dy_range,
+                                    dj_range=self.dx_range)
+        except ValueError:  # frame out
+            return None
+
+        return Point(int(point.x + dx), int(point.y + dy))

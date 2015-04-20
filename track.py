@@ -6,7 +6,8 @@ import os.path
 import sys
 
 from atamatracker.config import manager as config_manager
-from atamatracker import data, gui, moviefile
+from atamatracker import gui, moviefile
+from atamatracker.data import History, TrackPoint
 from atamatracker.detector import PatternDetector
 
 
@@ -26,9 +27,9 @@ def main(file_path):
 
     # init variables
     time = 0.0
+    last_time = None
     last_index = -1
-    points = dict()
-    history = data.History()
+    history = History()
 
     # load movie file
     movie = moviefile.Movie(file_path)
@@ -47,38 +48,30 @@ def main(file_path):
         window.image = image
 
         # auto-track points
-        if points:
-            prev_image = movie.load_image(time - config.time_step)
+        if last_time is not None:
+            prev_image = movie.load_image(last_time)
             if prev_image is None:
                 break
             detector = PatternDetector(prev_image, image)
 
-            for idx, point in points.items():
-                try:
-                    dx, dy = detector.detect(point.x, point.y)
-                except ValueError:  # frame out
-                    points.pop(idx, None)
-                    continue
-
-                point.move(dx, dy)
-
-                window.draw_marker(point, config.pattern_size)
+            for point in history.points(time=last_time):
+                position = detector.detect(point.position)
+                if position:
+                    history.append(TrackPoint(position, point.label, time))
+                    window.draw_marker(position, config.pattern_size)
 
         window.display()
 
         # wait for mouse event
-        clicked_points = eventListener.get_xy()
+        clicked_positions = eventListener.get_xy()
 
         # append new points
-        for point in clicked_points:
+        for position in clicked_positions:
             last_index += 1
-            points[last_index] = point
+            history.append(TrackPoint(position, last_index, time,
+                                      is_manual=True))
 
-        # append to result list
-        for idx, point in points.items():
-            track_point = data.TrackPoint(point, identifier=idx, time=time)
-            history.append(track_point)
-
+        last_time = time
         time += config.time_step
 
     window.close()
