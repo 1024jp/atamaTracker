@@ -59,7 +59,6 @@ def main(file_path):
                     continue
 
                 point.move(dx, dy)
-                point.isAutoDetected = True
 
                 window.draw_marker(point.x, point.y, config.pattern_size)
 

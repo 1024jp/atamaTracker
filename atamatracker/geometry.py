@@ -8,16 +8,15 @@ class Point(object):
     Public properties:
     x -- Horizontal coordinate
     y -- Vertical coordinate
-    isAutoDetected -- [bool] Whether the point was detected automatically?
     """
+    __slots__ = ['x', 'y']
 
-    def __init__(self, x, y, isAutoDetected=False):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.isAutoDetected = isAutoDetected
 
     def __str__(self):
-        return "Point({}, {})".format(self.x, self.y)
+        return "Point({0.x}, {0.y})".format(self)
 
     def move(self, dx, dy):
         """Translate point.
