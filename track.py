@@ -13,7 +13,7 @@ from atamatracker.detector import PatternDetector
 def setup(config):
     """initialize PatternDetector class.
     """
-    PatternDetector.kernel_size = (config.pattern_size, config.pattern_size)
+    PatternDetector.pattern_size = (config.pattern_size, config.pattern_size)
     PatternDetector.dx_range = (-config.find_buffer, config.find_buffer)
     PatternDetector.dy_range = (-config.find_buffer, config.find_buffer)
 
