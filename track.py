@@ -60,7 +60,7 @@ def main(file_path):
 
                 point.move(dx, dy)
 
-                window.draw_marker(point.x, point.y, config.pattern_size)
+                window.draw_marker(point, config.pattern_size)
 
         window.display()
 

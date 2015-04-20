@@ -3,14 +3,8 @@
 
 import cv2
 
+from . import graphics
 from .geometry import Point
-
-
-class Marker:
-    """Marker settings.
-    """
-    COLOR = (27, 190, 124)  # (B, G, R)
-    RADIUS = 2
 
 
 class EventListener(object):
@@ -31,14 +25,12 @@ class EventListener(object):
     def get_xy(self):
         """Listen mouse event and return clicked coordinates.
         """
-        cv2.waitKey(0)
-
-        points = self.clicked_points
-
         # reset stored coordinates
         self.clicked_points = []
 
-        return points
+        cv2.waitKey(0)
+
+        return self.clicked_points
 
     def __on_mouse_click(self, event, x, y, flags, param):
         """Mouse event callback.
@@ -48,7 +40,7 @@ class EventListener(object):
             self.is_pressed = True
             if not self.__is_clicked(point):
                 self.clicked_points.append(point)
-                self.window.draw_marker(point.x, point.y)
+                self.window.draw_marker(point)
                 self.window.display()
 
         elif event == cv2.EVENT_LBUTTONUP:
@@ -61,7 +53,7 @@ class EventListener(object):
         """Check whether the given point has already been clicked.
         """
         for p in self.clicked_points:
-            if p.distance(point) <= Marker.RADIUS + 2:  # +2 for buffer
+            if p.distance(point) <= graphics.Marker.RADIUS + 2:  # +2 for buffer
                 return point
 
         return None
@@ -89,12 +81,7 @@ class Window(object):
         """
         cv2.imshow(self.name, self.image)
 
-    def draw_marker(self, x, y, frame_size=0):
+    def draw_marker(self, point, frame_size=0):
         """Draw a circle at the desired coordinate on the image.
         """
-        cv2.circle(self.image, (x, y), Marker.RADIUS, Marker.COLOR, 2)
-
-        if frame_size > 0:
-            point1 = (x - frame_size / 2, y - frame_size / 2)
-            point2 = (x + frame_size / 2, y + frame_size / 2)
-            cv2.rectangle(self.image, point1, point2, Marker.COLOR, 1)
+        graphics.draw_marker(self.image, point, frame_size)
