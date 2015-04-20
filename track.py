@@ -6,7 +6,7 @@ import os.path
 import sys
 
 from atamatracker.config import manager as config_manager
-from atamatracker import gui, moviefile
+from atamatracker import data, gui, moviefile
 from atamatracker.detector import PatternDetector
 
 
@@ -24,11 +24,13 @@ def main(file_path):
     config = config_manager.config
     setup(config)
 
+    # init variables
     time = 0.0
     last_index = -1
     points = dict()
+    history = data.History()
 
-    # load a movie file
+    # load movie file
     movie = moviefile.Movie(file_path)
 
     # open a window
@@ -72,26 +74,20 @@ def main(file_path):
             last_index += 1
             points[last_index] = point
 
-        # output
+        # append to result list
         for idx, point in points.items():
-            _dump_result(time, idx, point.x, point.y)
+            track_point = data.TrackPoint(point, identifier=idx, time=time)
+            history.append(track_point)
 
         time += config.time_step
 
     window.close()
 
-
-def _dump_result(time, idx, x, y):
-    """Print result to the standard output.
-
-    Arguments:
-    time -- [float] time in second
-    idx -- [int] index number of person
-    x -- [int] x coordinate
-    y -- [int] y coordinate
-    """
-    print("{} {} {} {}".format(time, idx, y, x))
+    return history
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    result = main(sys.argv[1])
+
+    if len(sys.argv) > 2:
+        result.dump(sys.argv[2])

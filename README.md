@@ -11,7 +11,7 @@ AtamaTracker
 ## Usage
 
 - リポジトリのルートディレクトリに移動
-- `python track.py short.mov > result.txt` を実行
+- `python track.py short.mov result.csv` を実行
 - 0 秒目の画像が現れるので、ウィンドウをアクティブにしてからトラックしたい点をクリック
 - クリックし終わったら任意のキー（スペースキー）を押す
 - 任意のキー（スペースキー）を押すごとにフレームが 0.1 秒ずつ進み，追跡結果がマーカーで表示される
