@@ -7,6 +7,11 @@ from . import graphics
 from .geometry import Point
 
 
+# constants
+ESC = 27
+LEFT_ARROW = 63234
+
+
 class EventListener(object):
     """Listener for mouse events
 
@@ -28,7 +33,10 @@ class EventListener(object):
         # reset stored coordinates
         self.clicked_points = []
 
-        cv2.waitKey(0)
+        key = cv2.waitKey(0)
+        print(key)
+        if key == ESC:
+            raise UserCancelException
 
         return self.clicked_points
 
@@ -85,3 +93,9 @@ class Window(object):
         """Draw a circle at the desired coordinate on the image.
         """
         graphics.draw_marker(self.image, point, frame_size)
+
+
+class UserCancelException(Exception):
+    """User performed cancel.
+    """
+    pass

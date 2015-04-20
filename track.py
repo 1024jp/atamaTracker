@@ -63,7 +63,10 @@ def main(file_path):
         window.display()
 
         # wait for mouse event
-        clicked_positions = eventListener.get_xy()
+        try:
+            clicked_positions = eventListener.get_xy()
+        except gui.UserCancelException:  # cancel with esc key
+            break
 
         # append new points
         for position in clicked_positions:
