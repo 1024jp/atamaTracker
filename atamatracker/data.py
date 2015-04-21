@@ -69,13 +69,12 @@ class History(list):
 
         file_path -- [str] Path to result file
         """
-        f = open(file_path, 'wb')
-        writer = csv.writer(f, dialect='result')
-        for track in self:
-            writer.writerow([
-                '{}'.format(track.time),
-                track.label,
-                track.point.y,
-                track.point.x
-            ])
-        f.close()
+        with open(file_path, 'wb') as f:
+            writer = csv.writer(f, dialect='result')
+            for track in self:
+                writer.writerow((
+                    '{}'.format(track.time),
+                    track.label,
+                    track.point.y,
+                    track.point.x
+                ))
