@@ -7,7 +7,7 @@ import sys
 
 from atamatracker.config import manager as config_manager
 from atamatracker import gui, moviefile
-from atamatracker.data import History, TrackPoint
+from atamatracker.data import History, Track
 from atamatracker.detector import PatternDetector
 
 
@@ -54,25 +54,24 @@ def main(file_path):
                 break
             detector = PatternDetector(prev_image, image)
 
-            for point in history.points(time=last_time):
-                position = detector.detect(point.position)
-                if position:
-                    history.append(TrackPoint(position, point.label, time))
-                    window.draw_marker(position, config.pattern_size)
+            for last_track in history.tracks(time=last_time):
+                point = detector.detect(last_track.point)
+                if point:
+                    history.append(Track(point, last_track.label, time))
+                    window.draw_marker(point, config.pattern_size)
 
         window.display()
 
         # wait for mouse event
         try:
-            clicked_positions = eventListener.get_xy()
+            clicked_points = eventListener.get_xy()
         except gui.UserCancelException:  # cancel with esc key
             break
 
-        # append new points
-        for position in clicked_positions:
+        # append new tracks
+        for point in clicked_points:
             last_index += 1
-            history.append(TrackPoint(position, last_index, time,
-                                      is_manual=True))
+            history.append(Track(point, last_index, time, is_manual=True))
 
         last_time = time
         time += config.time_step

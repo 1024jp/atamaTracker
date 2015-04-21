@@ -8,52 +8,52 @@ import csv
 csv.register_dialect('result', delimiter='\t', lineterminator='\n')
 
 
-class TrackPoint(object):
+class Track(object):
     """Tracked point data struct.
 
     Public properties:
-    position -- [Point] Tracked/clicked position
+    point -- [Point] Tracked/clicked point position
     label -- [int] Index number
     time -- [float] Clicked time
     is_manual -- [bool] Whether the point was clicked manually
     """
 
-    __slots__ = ['time', 'label', 'position', 'is_manual']
+    __slots__ = ['time', 'label', 'point', 'is_manual']
 
-    def __init__(self, position, label, time, is_manual=False):
-        self.position = position
+    def __init__(self, point, label, time, is_manual=False):
+        self.point = point
         self.time = time
         self.label = label
         self.is_manual = is_manual
 
     def __str__(self):
-        return "TrackPoint(({pos.x}, {pos.y}), {label}, {time})".format(
-            pos=self.position,
+        return "Track(({point.x}, {point.y}), {label}, {time})".format(
+            point=self.point,
             label=self.label,
             time=self.time,
         )
 
 
 class History(list):
-    """List of TrackPoint objects.
+    """List of Track objects.
     """
 
-    def point(self, time, idenfifier):
-        matches = self.points(time=time, label=label)
+    def track(self, time, idenfifier):
+        matches = self.trasks(time=time, label=label)
 
         if len(matches) > 0:
             return matches[0]
         else:
             return None
 
-    def points(self, time=None, label=None):
+    def tracks(self, time=None, label=None):
         """Filter with given properties.
         """
         matches = []
-        for point in self:
-            if ((time is None or point.time == time) and
-                    (label is None or point.label == label)):
-                matches.append(point)
+        for track in self:
+            if ((time is None or track.time == time) and
+                    (label is None or track.label == label)):
+                matches.append(track)
 
         return matches
 
@@ -71,11 +71,11 @@ class History(list):
         """
         f = open(file_path, 'wb')
         writer = csv.writer(f, dialect='result')
-        for point in self:
+        for track in self:
             writer.writerow([
-                '{}'.format(point.time),
-                point.label,
-                point.position.y,
-                point.position.x
+                '{}'.format(track.time),
+                track.label,
+                track.point.y,
+                track.point.x
             ])
         f.close()
