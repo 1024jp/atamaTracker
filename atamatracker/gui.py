@@ -34,7 +34,7 @@ class EventListener(object):
         self.clicked_points = []
 
         key = cv2.waitKey(0)
-        print(key)
+
         if key == ESC:
             raise UserCancelException
 
