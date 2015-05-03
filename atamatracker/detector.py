@@ -1,6 +1,8 @@
 """Pattern detector
 """
 
+import math
+
 import cv2
 
 from . import piv
@@ -46,6 +48,9 @@ class PatternDetector(object):
                                     di_range=self.dy_range,
                                     dj_range=self.dx_range)
         except ValueError:  # frame out
+            return None
+
+        if math.isnan(dx) or math.isnan(dy):
             return None
 
         return Point(int(point.x + dx), int(point.y + dy))
